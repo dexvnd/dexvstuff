@@ -31,3 +31,16 @@ class JsdomRuntime:
             return json.loads(result) if byte_array else result
         except Exception as e:
             if not suppress: raise e
+    
+    def close(self) -> None:
+        try:
+            self.dom.window.close()
+        finally:
+            self.dom = None
+            self.runtime = None
+    
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        self.close()
